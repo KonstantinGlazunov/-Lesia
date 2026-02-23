@@ -2,7 +2,6 @@ import path from "path"
 import fs from "node:fs"
 import react from "@vitejs/plugin-react"
 import { defineConfig } from "vite"
-import { inspectAttr } from 'kimi-plugin-inspect-react'
 
 // Копирование index.html в 404.html для GitHub Pages (SPA: при прямом заходе на /-Lesia/impressum отдаётся тот же index)
 function copy404Plugin() {
@@ -23,10 +22,9 @@ function copy404Plugin() {
 export default defineConfig({
   base: '/-Lesia/',
   plugins: [
-    process.env.NODE_ENV === 'development' ? inspectAttr() : null,
     react(),
     copy404Plugin(),
-  ].filter(Boolean),
+  ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

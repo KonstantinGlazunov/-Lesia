@@ -5,9 +5,11 @@ import { LanguageProvider } from '@/contexts/LanguageContext'
 import './index.css'
 import App from './App.tsx'
 
+const basename = (import.meta.env.BASE_URL || '/').replace(/\/$/, '') || undefined;
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={basename || undefined}>
       <LanguageProvider>
         <App />
       </LanguageProvider>

@@ -1,16 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 import { Camera, Eye, Smile, Sparkles, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { portfolioImages } from '@/lib/images';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface PortfolioItem {
   id: number;
   category: 'brows' | 'lips' | 'eyes';
-  title: string;
-  description: string;
+  titleKey: string;
+  descriptionKey: string;
   image: string;
 }
 
 export default function Portfolio() {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [activeFilter, setActiveFilter] = useState<'all' | 'brows' | 'lips' | 'eyes'>('all');
@@ -35,76 +37,22 @@ export default function Portfolio() {
   }, []);
 
   const filters = [
-    { key: 'all', label: 'Все работы', icon: Camera },
-    { key: 'brows', label: 'Брови', icon: Eye },
-    { key: 'lips', label: 'Губы', icon: Smile },
-    { key: 'eyes', label: 'Веки', icon: Sparkles },
-  ] as const;
+    { key: 'all' as const, labelKey: 'portfolio.filterAll', icon: Camera },
+    { key: 'brows' as const, labelKey: 'portfolio.filterBrows', icon: Eye },
+    { key: 'lips' as const, labelKey: 'portfolio.filterLips', icon: Smile },
+    { key: 'eyes' as const, labelKey: 'portfolio.filterEyes', icon: Sparkles },
+  ];
 
   const portfolioItems: PortfolioItem[] = [
-    { 
-      id: 1, 
-      category: 'brows', 
-      title: 'Естественные брови', 
-      description: 'Техника пудрового напыления',
-      image: portfolioImages[0]
-    },
-    { 
-      id: 2, 
-      category: 'lips', 
-      title: 'Объемные губы', 
-      description: 'Акварельная техника',
-      image: portfolioImages[1]
-    },
-    { 
-      id: 3, 
-      category: 'eyes', 
-      title: 'Выразительный взгляд', 
-      description: 'Межресничное пространство',
-      image: portfolioImages[2]
-    },
-    { 
-      id: 4, 
-      category: 'brows', 
-      title: 'Идеальная форма', 
-      description: 'Волосковая техника',
-      image: portfolioImages[3]
-    },
-    { 
-      id: 5, 
-      category: 'lips', 
-      title: 'Нежный контур', 
-      description: 'Техника липкий губ',
-      image: portfolioImages[4]
-    },
-    { 
-      id: 6, 
-      category: 'eyes', 
-      title: 'Стрелки', 
-      description: 'Классическая стрелка',
-      image: portfolioImages[5]
-    },
-    { 
-      id: 7, 
-      category: 'brows', 
-      title: 'Мягкие брови', 
-      description: 'Комбинированная техника',
-      image: portfolioImages[6]
-    },
-    { 
-      id: 8, 
-      category: 'lips', 
-      title: 'Естественный цвет', 
-      description: 'Пигментация губ',
-      image: portfolioImages[7]
-    },
-    { 
-      id: 9, 
-      category: 'eyes', 
-      title: 'Тонкая стрелка', 
-      description: 'Естественный подвод',
-      image: portfolioImages[8]
-    },
+    { id: 1, category: 'brows', titleKey: 'portfolio.item1Title', descriptionKey: 'portfolio.item1Desc', image: portfolioImages[0] },
+    { id: 2, category: 'lips', titleKey: 'portfolio.item2Title', descriptionKey: 'portfolio.item2Desc', image: portfolioImages[1] },
+    { id: 3, category: 'eyes', titleKey: 'portfolio.item3Title', descriptionKey: 'portfolio.item3Desc', image: portfolioImages[2] },
+    { id: 4, category: 'brows', titleKey: 'portfolio.item4Title', descriptionKey: 'portfolio.item4Desc', image: portfolioImages[3] },
+    { id: 5, category: 'lips', titleKey: 'portfolio.item5Title', descriptionKey: 'portfolio.item5Desc', image: portfolioImages[4] },
+    { id: 6, category: 'eyes', titleKey: 'portfolio.item6Title', descriptionKey: 'portfolio.item6Desc', image: portfolioImages[5] },
+    { id: 7, category: 'brows', titleKey: 'portfolio.item7Title', descriptionKey: 'portfolio.item7Desc', image: portfolioImages[6] },
+    { id: 8, category: 'lips', titleKey: 'portfolio.item8Title', descriptionKey: 'portfolio.item8Desc', image: portfolioImages[7] },
+    { id: 9, category: 'eyes', titleKey: 'portfolio.item9Title', descriptionKey: 'portfolio.item9Desc', image: portfolioImages[8] },
   ];
 
   const filteredItems = activeFilter === 'all' 
@@ -142,16 +90,15 @@ export default function Portfolio() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-rose-100/50 mb-6">
             <Camera className="w-4 h-4 text-rose-500" />
-            <span className="text-sm font-medium text-rose-700">Портфолио</span>
+            <span className="text-sm font-medium text-rose-700">{t('portfolio.badge')}</span>
           </div>
 
           <h2 className="text-4xl sm:text-5xl font-light text-gray-800 mb-6 leading-tight">
-            Мои <span className="italic text-gradient">работы</span>
+            {t('portfolio.title')}
           </h2>
 
           <p className="text-lg text-gray-600 leading-relaxed">
-            Каждая работа — это индивидуальный подход и создание уникального образа 
-            под особенности клиента
+            {t('portfolio.intro')}
           </p>
         </div>
 
@@ -172,7 +119,7 @@ export default function Portfolio() {
               }`}
             >
               <filter.icon className="w-4 h-4" />
-              {filter.label}
+              {t(filter.labelKey)}
             </button>
           ))}
         </div>
@@ -191,7 +138,7 @@ export default function Portfolio() {
               {/* Image */}
               <img
                 src={item.image}
-                alt={item.title}
+                alt={t(item.titleKey)}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
 
@@ -201,10 +148,10 @@ export default function Portfolio() {
               {/* Content on hover */}
               <div className="absolute inset-0 flex flex-col justify-end p-6 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0">
                 <span className="text-xs text-white/70 uppercase tracking-wider mb-1">
-                  {item.category === 'brows' ? 'Брови' : item.category === 'lips' ? 'Губы' : 'Веки'}
+                  {item.category === 'brows' ? t('portfolio.filterBrows') : item.category === 'lips' ? t('portfolio.filterLips') : t('portfolio.filterEyes')}
                 </span>
-                <h3 className="text-xl font-medium text-white mb-1">{item.title}</h3>
-                <p className="text-sm text-white/80">{item.description}</p>
+                <h3 className="text-xl font-medium text-white mb-1">{t(item.titleKey)}</h3>
+                <p className="text-sm text-white/80">{t(item.descriptionKey)}</p>
               </div>
 
               {/* Corner badge */}
@@ -222,17 +169,17 @@ export default function Portfolio() {
           }`}
         >
           {[
-            { value: '2000+', label: 'Процедур' },
-            { value: '98%', label: 'Довольных клиентов' },
-            { value: '8', label: 'Лет опыта' },
-            { value: '50+', label: 'Мастер-классов' },
+            { value: '2000+', labelKey: 'portfolio.stat1' },
+            { value: '98%', labelKey: 'portfolio.stat2' },
+            { value: '8', labelKey: 'portfolio.stat3' },
+            { value: '50+', labelKey: 'portfolio.stat4' },
           ].map((stat) => (
             <div
-              key={stat.label}
+              key={stat.labelKey}
               className="text-center p-6 rounded-2xl bg-white/60 backdrop-blur-sm border border-rose-100"
             >
               <div className="text-3xl font-light text-gradient mb-1">{stat.value}</div>
-              <div className="text-sm text-gray-500">{stat.label}</div>
+              <div className="text-sm text-gray-500">{t(stat.labelKey)}</div>
             </div>
           ))}
         </div>
@@ -272,16 +219,16 @@ export default function Portfolio() {
             <div className="aspect-square sm:aspect-video">
               <img
                 src={selectedItem.image}
-                alt={selectedItem.title}
+                alt={t(selectedItem.titleKey)}
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="p-8">
               <span className="text-sm text-rose-500 uppercase tracking-wider">
-                {selectedItem.category === 'brows' ? 'Брови' : selectedItem.category === 'lips' ? 'Губы' : 'Веки'}
+                {selectedItem.category === 'brows' ? t('portfolio.filterBrows') : selectedItem.category === 'lips' ? t('portfolio.filterLips') : t('portfolio.filterEyes')}
               </span>
-              <h3 className="text-2xl font-medium text-gray-800 mt-2 mb-2">{selectedItem.title}</h3>
-              <p className="text-gray-600">{selectedItem.description}</p>
+              <h3 className="text-2xl font-medium text-gray-800 mt-2 mb-2">{t(selectedItem.titleKey)}</h3>
+              <p className="text-gray-600">{t(selectedItem.descriptionKey)}</p>
             </div>
           </div>
         </div>

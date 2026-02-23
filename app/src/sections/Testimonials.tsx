@@ -1,16 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 import { Quote, Star, ChevronLeft, ChevronRight, MessageCircle } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface Testimonial {
   id: number;
-  name: string;
-  service: string;
+  nameKey: string;
+  serviceKey: string;
+  textKey: string;
+  dateKey: string;
   rating: number;
-  text: string;
-  date: string;
 }
 
 export default function Testimonials() {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -34,46 +36,11 @@ export default function Testimonials() {
   }, []);
 
   const testimonials: Testimonial[] = [
-    {
-      id: 1,
-      name: 'Екатерина М.',
-      service: 'Пудровые брови',
-      rating: 5,
-      text: 'Леся — настоящий профессионал! Брови получились естественными и красивыми. Процедура прошла комфортно, заживление было легким. Теперь утром экономлю кучу времени!',
-      date: 'январь 2026',
-    },
-    {
-      id: 2,
-      name: 'Марина С.',
-      service: 'Перманент губ',
-      rating: 5,
-      text: 'Долго решалась на перманент губ, но результат превзошел все ожидания! Цвет идеальный, губы выглядят объемнее. Леся подробно объяснила весь процесс и уход.',
-      date: 'декабрь 2025',
-    },
-    {
-      id: 3,
-      name: 'Анна В.',
-      service: 'Межресничка',
-      rating: 5,
-      text: 'Мечтала о выразительном взгляде без ежедневного подвода. Межресничное пространство — это именно то, что нужно! Естественно, красиво, глаза сразу выглядят ярче.',
-      date: 'ноябрь 2025',
-    },
-    {
-      id: 4,
-      name: 'Ольга П.',
-      service: 'Волосковые брови',
-      rating: 5,
-      text: 'Волосковая техника — это магия! Брови выглядят абсолютно натуральными, как настоящие. Леся учла все мои пожелания и подобрала идеальную форму.',
-      date: 'октябрь 2025',
-    },
-    {
-      id: 5,
-      name: 'Наталья К.',
-      service: 'Комплекс: брови + губы',
-      rating: 5,
-      text: 'Сделала сразу брови и губы — лучшее решение! Теперь всегда выгляжу свежей и ухоженной. Спасибо Лесе за терпение и профессионализм!',
-      date: 'сентябрь 2025',
-    },
+    { id: 1, nameKey: 'testimonials.name1', serviceKey: 'testimonials.service1', textKey: 'testimonials.text1', dateKey: 'testimonials.date1', rating: 5 },
+    { id: 2, nameKey: 'testimonials.name2', serviceKey: 'testimonials.service2', textKey: 'testimonials.text2', dateKey: 'testimonials.date2', rating: 5 },
+    { id: 3, nameKey: 'testimonials.name3', serviceKey: 'testimonials.service3', textKey: 'testimonials.text3', dateKey: 'testimonials.date3', rating: 5 },
+    { id: 4, nameKey: 'testimonials.name4', serviceKey: 'testimonials.service4', textKey: 'testimonials.text4', dateKey: 'testimonials.date4', rating: 5 },
+    { id: 5, nameKey: 'testimonials.name5', serviceKey: 'testimonials.service5', textKey: 'testimonials.text5', dateKey: 'testimonials.date5', rating: 5 },
   ];
 
   const nextTestimonial = () => {
@@ -106,16 +73,15 @@ export default function Testimonials() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-rose-100/50 mb-6">
             <MessageCircle className="w-4 h-4 text-rose-500" />
-            <span className="text-sm font-medium text-rose-700">Отзывы</span>
+            <span className="text-sm font-medium text-rose-700">{t('testimonials.badge')}</span>
           </div>
 
           <h2 className="text-4xl sm:text-5xl font-light text-gray-800 mb-6 leading-tight">
-            Что говорят <span className="italic text-gradient">клиенты</span>
+            {t('testimonials.title')}
           </h2>
 
           <p className="text-lg text-gray-600 leading-relaxed">
-            Благодарна каждой клиентке за доверие и теплые слова. 
-            Ваши отзывы — лучшая награда за мою работу
+            {t('testimonials.intro')}
           </p>
         </div>
 
@@ -151,16 +117,16 @@ export default function Testimonials() {
 
                       {/* Text */}
                       <p className="text-lg sm:text-xl text-gray-700 leading-relaxed mb-8 italic">
-                        "{testimonial.text}"
+                        "{t(testimonial.textKey)}"
                       </p>
 
                       {/* Author */}
                       <div className="flex items-center justify-between">
                         <div>
-                          <h4 className="font-medium text-gray-800">{testimonial.name}</h4>
-                          <p className="text-sm text-rose-500">{testimonial.service}</p>
+                          <h4 className="font-medium text-gray-800">{t(testimonial.nameKey)}</h4>
+                          <p className="text-sm text-rose-500">{t(testimonial.serviceKey)}</p>
                         </div>
-                        <span className="text-sm text-gray-400">{testimonial.date}</span>
+                        <span className="text-sm text-gray-400">{t(testimonial.dateKey)}</span>
                       </div>
                     </div>
                   </div>
@@ -215,15 +181,15 @@ export default function Testimonials() {
                 <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
               ))}
             </div>
-            <div className="text-sm text-gray-500">средний рейтинг</div>
+            <div className="text-sm text-gray-500">{t('testimonials.rating')}</div>
           </div>
           <div className="text-center">
             <div className="text-4xl font-light text-gradient mb-2">200+</div>
-            <div className="text-sm text-gray-500">отзывов</div>
+            <div className="text-sm text-gray-500">{t('testimonials.reviews')}</div>
           </div>
           <div className="text-center">
             <div className="text-4xl font-light text-gradient mb-2">98%</div>
-            <div className="text-sm text-gray-500">рекомендуют</div>
+            <div className="text-sm text-gray-500">{t('testimonials.recommend')}</div>
           </div>
         </div>
       </div>

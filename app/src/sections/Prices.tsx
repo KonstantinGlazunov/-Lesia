@@ -1,22 +1,23 @@
 import { useEffect, useRef, useState } from 'react';
 import { Check, Sparkles, Star, Crown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface PriceItem {
-  name: string;
+  nameKey: string;
+  descriptionKey: string;
   price: string;
-  oldPrice?: string;
-  description: string;
 }
 
 interface PriceCategory {
-  title: string;
+  titleKey: string;
   icon: React.ElementType;
   items: PriceItem[];
   color: string;
 }
 
 export default function Prices() {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -40,45 +41,45 @@ export default function Prices() {
 
   const priceCategories: PriceCategory[] = [
     {
-      title: 'Брови',
+      titleKey: 'prices.categoryBrows',
       icon: Sparkles,
       color: 'from-rose-400 to-rose-500',
       items: [
-        { name: 'Пудровое напыление', price: '150 €', description: 'Мягкий, естественный эффект' },
-        { name: 'Волосковая техника', price: '180 €', description: 'Имитация натуральных волосков' },
-        { name: 'Комбинированная', price: '200 €', description: 'Сочетание техник' },
-        { name: 'Коррекция (до 2 мес)', price: '50 €', description: 'Доработка результата' },
+        { nameKey: 'prices.itemPowder', descriptionKey: 'prices.itemPowderDesc', price: '150 €' },
+        { nameKey: 'prices.itemHair', descriptionKey: 'prices.itemHairDesc', price: '180 €' },
+        { nameKey: 'prices.itemCombo', descriptionKey: 'prices.itemComboDesc', price: '200 €' },
+        { nameKey: 'prices.itemCorrectionBrows', descriptionKey: 'prices.itemCorrectionBrowsDesc', price: '50 €' },
       ],
     },
     {
-      title: 'Губы',
+      titleKey: 'prices.categoryLips',
       icon: Crown,
       color: 'from-pink-400 to-pink-500',
       items: [
-        { name: 'Акварельная техника', price: '180 €', description: 'Нежный, размытый контур' },
-        { name: 'Контур + растушевка', price: '200 €', description: 'Четкий контур с объемом' },
-        { name: '3D эффект', price: '250 €', description: 'Максимальный объем' },
-        { name: 'Коррекция (до 2 мес)', price: '60 €', description: 'Доработка результата' },
+        { nameKey: 'prices.itemAqua', descriptionKey: 'prices.itemAquaDesc', price: '180 €' },
+        { nameKey: 'prices.itemContour', descriptionKey: 'prices.itemContourDesc', price: '200 €' },
+        { nameKey: 'prices.item3d', descriptionKey: 'prices.item3dDesc', price: '250 €' },
+        { nameKey: 'prices.itemCorrectionLips', descriptionKey: 'prices.itemCorrectionLipsDesc', price: '60 €' },
       ],
     },
     {
-      title: 'Веки',
+      titleKey: 'prices.categoryEyes',
       icon: Star,
       color: 'from-amber-400 to-amber-500',
       items: [
-        { name: 'Межресничное пространство', price: '120 €', description: 'Естественный эффект' },
-        { name: 'Классическая стрелка', price: '150 €', description: 'Четкая линия' },
-        { name: 'Стрелка с растушевкой', price: '180 €', description: 'Мягкий переход' },
-        { name: 'Коррекция (до 2 мес)', price: '40 €', description: 'Доработка результата' },
+        { nameKey: 'prices.itemInterlash', descriptionKey: 'prices.itemInterlashDesc', price: '120 €' },
+        { nameKey: 'prices.itemArrowClassic', descriptionKey: 'prices.itemArrowClassicDesc', price: '150 €' },
+        { nameKey: 'prices.itemArrowSoft', descriptionKey: 'prices.itemArrowSoftDesc', price: '180 €' },
+        { nameKey: 'prices.itemCorrectionEyes', descriptionKey: 'prices.itemCorrectionEyesDesc', price: '40 €' },
       ],
     },
   ];
 
   const additionalServices = [
-    { name: 'Консультация', price: 'Бесплатно' },
-    { name: 'Анестезия', price: 'Включена' },
-    { name: 'Уходовый комплект', price: 'Включен' },
-    { name: 'Ретушь (после 2 мес)', price: '50% от стоимости' },
+    { nameKey: 'prices.extraConsult', priceKey: 'prices.extraConsultPrice' },
+    { nameKey: 'prices.extraAnesthesia', priceKey: 'prices.extraAnesthesiaPrice' },
+    { nameKey: 'prices.extraCare', priceKey: 'prices.extraCarePrice' },
+    { nameKey: 'prices.extraRetouch', priceKey: 'prices.extraRetouchPrice' },
   ];
 
   const scrollToContact = () => {
@@ -110,15 +111,15 @@ export default function Prices() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-rose-100/50 mb-6">
             <Star className="w-4 h-4 text-rose-500" />
-            <span className="text-sm font-medium text-rose-700">Цены</span>
+            <span className="text-sm font-medium text-rose-700">{t('prices.badge')}</span>
           </div>
 
           <h2 className="text-4xl sm:text-5xl font-light text-gray-800 mb-6 leading-tight">
-            Прозрачное <span className="italic text-gradient">ценообразование</span>
+            {t('prices.title')}
           </h2>
 
           <p className="text-lg text-gray-600 leading-relaxed">
-            Все цены указаны окончательно и включают консультацию, анестезию и уходовый комплект
+            {t('prices.intro')}
           </p>
         </div>
 
@@ -126,7 +127,7 @@ export default function Prices() {
         <div className="grid lg:grid-cols-3 gap-8 mb-16">
           {priceCategories.map((category, catIndex) => (
             <div
-              key={category.title}
+              key={category.titleKey}
               className={`relative transition-all duration-700 ${
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
               }`}
@@ -139,7 +140,7 @@ export default function Prices() {
                     <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
                       <category.icon className="w-6 h-6 text-white" />
                     </div>
-                    <h3 className="text-2xl font-medium text-white">{category.title}</h3>
+                    <h3 className="text-2xl font-medium text-white">{t(category.titleKey)}</h3>
                   </div>
                 </div>
 
@@ -148,12 +149,12 @@ export default function Prices() {
                   <div className="space-y-4">
                     {category.items.map((item) => (
                       <div
-                        key={item.name}
+                        key={item.nameKey}
                         className="flex items-start justify-between gap-4 p-4 rounded-xl bg-rose-50/50 hover:bg-rose-50 transition-colors duration-300"
                       >
                         <div className="flex-1">
-                          <h4 className="font-medium text-gray-800 mb-1">{item.name}</h4>
-                          <p className="text-sm text-gray-500">{item.description}</p>
+                          <h4 className="font-medium text-gray-800 mb-1">{t(item.nameKey)}</h4>
+                          <p className="text-sm text-gray-500">{t(item.descriptionKey)}</p>
                         </div>
                         <div className="text-right">
                           <span className="text-lg font-semibold text-rose-500">{item.price}</span>
@@ -169,7 +170,7 @@ export default function Prices() {
                     onClick={scrollToContact}
                     className={`w-full bg-gradient-to-r ${category.color} text-white rounded-xl py-5 hover:shadow-lg transition-all duration-300`}
                   >
-                    Записаться
+                    {t('prices.book')}
                   </Button>
                 </div>
               </div>
@@ -184,19 +185,19 @@ export default function Prices() {
           }`}
         >
           <div className="rounded-3xl bg-white/80 backdrop-blur-sm border border-rose-100 p-8 shadow-lg">
-            <h3 className="text-2xl font-medium text-gray-800 mb-6 text-center">Дополнительные услуги</h3>
+            <h3 className="text-2xl font-medium text-gray-800 mb-6 text-center">{t('prices.extraTitle')}</h3>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {additionalServices.map((service) => (
                 <div
-                  key={service.name}
+                  key={service.nameKey}
                   className="flex items-center gap-3 p-4 rounded-xl bg-rose-50/50"
                 >
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-rose-400 to-rose-500 flex items-center justify-center flex-shrink-0">
                     <Check className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <p className="font-medium text-gray-800">{service.name}</p>
-                    <p className="text-sm text-rose-500">{service.price}</p>
+                    <p className="font-medium text-gray-800">{t(service.nameKey)}</p>
+                    <p className="text-sm text-rose-500">{t(service.priceKey)}</p>
                   </div>
                 </div>
               ))}
@@ -211,7 +212,7 @@ export default function Prices() {
           }`}
         >
           <p className="text-gray-500">
-            Preise in Euro (€). Zahlung per Bar, Karte oder Überweisung.
+            {t('prices.paymentNote')}
           </p>
         </div>
       </div>

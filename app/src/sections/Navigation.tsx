@@ -1,10 +1,15 @@
 import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function Navigation() {
+  const { t, locale, setLocale } = useLanguage();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
+  const isHome = location.pathname === '/';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,20 +21,22 @@ export default function Navigation() {
   }, []);
 
   const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+    if (isHome) {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
     }
     setIsMobileMenuOpen(false);
   };
 
   const navLinks = [
-    { label: 'О мастере', id: 'about' },
-    { label: 'Услуги', id: 'services' },
-    { label: 'Портфолио', id: 'portfolio' },
-    { label: 'Цены', id: 'prices' },
-    { label: 'Отзывы', id: 'testimonials' },
-    { label: 'Контакты', id: 'contact' },
+    { labelKey: 'nav.about', id: 'about' },
+    { labelKey: 'nav.services', id: 'services' },
+    { labelKey: 'nav.portfolio', id: 'portfolio' },
+    { labelKey: 'nav.prices', id: 'prices' },
+    { labelKey: 'nav.testimonials', id: 'testimonials' },
+    { labelKey: 'nav.contact', id: 'contact' },
   ];
 
   return (
@@ -45,43 +52,107 @@ export default function Navigation() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <button
-              onClick={() => scrollToSection('hero')}
-              className={`text-2xl font-light italic transition-colors duration-300 ${
-                isScrolled ? 'text-rose-500' : 'text-gray-800'
-              }`}
-            >
-              Beauty Studio
-            </button>
+            {isHome ? (
+              <button
+                onClick={() => scrollToSection('hero')}
+                className={`text-2xl font-light italic transition-colors duration-300 ${
+                  isScrolled ? 'text-rose-500' : 'text-gray-800'
+                }`}
+              >
+                Beauty Studio
+              </button>
+            ) : (
+              <Link
+                to="/"
+                className={`text-2xl font-light italic transition-colors duration-300 ${
+                  isScrolled ? 'text-rose-500' : 'text-gray-800'
+                }`}
+              >
+                Beauty Studio
+              </Link>
+            )}
 
-            {/* Desktop Links */}
-            <div className="hidden lg:flex items-center gap-8">
-              {navLinks.map((link) => (
+            {/* Desktop Links + Language */}
+            <div className="hidden lg:flex items-center gap-6">
+              {navLinks.map((link) =>
+                isHome ? (
+                  <button
+                    key={link.id}
+                    onClick={() => scrollToSection(link.id)}
+                    className={`text-sm font-medium transition-colors duration-300 hover:text-rose-500 ${
+                      isScrolled ? 'text-gray-700' : 'text-gray-700'
+                    }`}
+                  >
+                    {t(link.labelKey)}
+                  </button>
+                ) : (
+                  <Link
+                    key={link.id}
+                    to={`/#${link.id}`}
+                    className={`text-sm font-medium transition-colors duration-300 hover:text-rose-500 ${
+                      isScrolled ? 'text-gray-700' : 'text-gray-700'
+                    }`}
+                  >
+                    {t(link.labelKey)}
+                  </Link>
+                )
+              )}
+
+              {/* Language switcher */}
+              <div className="flex items-center gap-0.5 ml-2 pl-4 border-l border-rose-200/60">
                 <button
-                  key={link.id}
-                  onClick={() => scrollToSection(link.id)}
-                  className={`text-sm font-medium transition-colors duration-300 hover:text-rose-500 ${
-                    isScrolled ? 'text-gray-700' : 'text-gray-700'
+                  onClick={() => setLocale('ru')}
+                  className={`px-2.5 py-1 rounded text-sm font-medium transition-colors ${
+                    locale === 'ru'
+                      ? 'bg-rose-500 text-white'
+                      : 'text-gray-500 hover:text-rose-600'
                   }`}
+                  aria-label="Русский"
                 >
-                  {link.label}
+                  RU
                 </button>
-              ))}
+                <button
+                  onClick={() => setLocale('de')}
+                  className={`px-2.5 py-1 rounded text-sm font-medium transition-colors ${
+                    locale === 'de'
+                      ? 'bg-rose-500 text-white'
+                      : 'text-gray-500 hover:text-rose-600'
+                  }`}
+                  aria-label="Deutsch"
+                >
+                  DE
+                </button>
+              </div>
             </div>
 
             {/* CTA Button */}
             <div className="hidden lg:block">
-              <Button
-                onClick={() => scrollToSection('contact')}
-                className={`rounded-full px-6 transition-all duration-300 ${
-                  isScrolled
-                    ? 'bg-gradient-to-r from-rose-400 to-rose-500 text-white hover:shadow-lg'
-                    : 'bg-white/80 backdrop-blur-sm text-rose-500 border border-rose-200 hover:bg-white'
-                }`}
-              >
-                <Phone className="w-4 h-4 mr-2" />
-                Записаться
-              </Button>
+              {isHome ? (
+                <Button
+                  onClick={() => scrollToSection('contact')}
+                  className={`rounded-full px-6 transition-all duration-300 ${
+                    isScrolled
+                      ? 'bg-gradient-to-r from-rose-400 to-rose-500 text-white hover:shadow-lg'
+                      : 'bg-white/80 backdrop-blur-sm text-rose-500 border border-rose-200 hover:bg-white'
+                  }`}
+                >
+                  <Phone className="w-4 h-4 mr-2" />
+                  {t('nav.book')}
+                </Button>
+              ) : (
+                <Link to="/#contact">
+                  <Button
+                    className={`rounded-full px-6 transition-all duration-300 ${
+                      isScrolled
+                        ? 'bg-gradient-to-r from-rose-400 to-rose-500 text-white hover:shadow-lg'
+                        : 'bg-white/80 backdrop-blur-sm text-rose-500 border border-rose-200 hover:bg-white'
+                    }`}
+                  >
+                    <Phone className="w-4 h-4 mr-2" />
+                    {t('nav.book')}
+                  </Button>
+                </Link>
+              )}
             </div>
 
             {/* Mobile Menu Button */}
@@ -119,33 +190,72 @@ export default function Navigation() {
         >
           <div className="p-6 pt-20">
             <div className="space-y-2">
-              {navLinks.map((link, index) => (
-                <button
-                  key={link.id}
-                  onClick={() => scrollToSection(link.id)}
-                  className={`w-full text-left px-4 py-3 rounded-xl text-gray-700 hover:bg-rose-50 hover:text-rose-600 transition-all duration-300 ${
-                    isMobileMenuOpen ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'
-                  }`}
-                  style={{ transitionDelay: `${index * 50}ms` }}
-                >
-                  {link.label}
-                </button>
-              ))}
+              {navLinks.map((link, index) =>
+                isHome ? (
+                  <button
+                    key={link.id}
+                    onClick={() => scrollToSection(link.id)}
+                    className={`w-full text-left px-4 py-3 rounded-xl text-gray-700 hover:bg-rose-50 hover:text-rose-600 transition-all duration-300 ${
+                      isMobileMenuOpen ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'
+                    }`}
+                    style={{ transitionDelay: `${index * 50}ms` }}
+                  >
+                    {t(link.labelKey)}
+                  </button>
+                ) : (
+                  <Link
+                    key={link.id}
+                    to={`/#${link.id}`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`block w-full text-left px-4 py-3 rounded-xl text-gray-700 hover:bg-rose-50 hover:text-rose-600 transition-all duration-300 ${
+                      isMobileMenuOpen ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'
+                    }`}
+                    style={{ transitionDelay: `${index * 50}ms` }}
+                  >
+                    {t(link.labelKey)}
+                  </Link>
+                )
+              )}
             </div>
 
             <div className="mt-8 pt-8 border-t border-rose-100">
-              <Button
-                onClick={() => scrollToSection('contact')}
-                className="w-full bg-gradient-to-r from-rose-400 to-rose-500 text-white rounded-xl py-6"
-              >
-                <Phone className="w-5 h-5 mr-2" />
-                Записаться на процедуру
-              </Button>
+              {isHome ? (
+                <Button
+                  onClick={() => scrollToSection('contact')}
+                  className="w-full bg-gradient-to-r from-rose-400 to-rose-500 text-white rounded-xl py-6"
+                >
+                  <Phone className="w-5 h-5 mr-2" />
+                  {t('nav.bookProcedure')}
+                </Button>
+              ) : (
+                <Link to="/#contact" onClick={() => setIsMobileMenuOpen(false)}>
+                  <Button className="w-full bg-gradient-to-r from-rose-400 to-rose-500 text-white rounded-xl py-6">
+                    <Phone className="w-5 h-5 mr-2" />
+                    {t('nav.bookProcedure')}
+                  </Button>
+                </Link>
+              )}
             </div>
 
             <div className="mt-8 text-center">
               <p className="text-sm text-gray-500">+49 151 12345678</p>
-              <p className="text-sm text-gray-400">Пн–Сб: 10:00 – 20:00</p>
+              <p className="text-sm text-gray-400">{t('nav.hours')}</p>
+            </div>
+
+            {/* Language switcher mobile */}
+            <div className="mt-6 pt-6 border-t border-rose-100 flex justify-center gap-2">
+              <button
+                onClick={() => { setLocale('ru'); setIsMobileMenuOpen(false); }}
+                className={`px-4 py-2 rounded-lg text-sm font-medium ${locale === 'ru' ? 'bg-rose-500 text-white' : 'bg-rose-50 text-gray-600'}`}
+              >
+                RU
+              </button>
+              <button
+                onClick={() => { setLocale('de'); setIsMobileMenuOpen(false); }}
+                className={`px-4 py-2 rounded-lg text-sm font-medium ${locale === 'de' ? 'bg-rose-500 text-white' : 'bg-rose-50 text-gray-600'}`}
+              >
+                DE
+              </button>
             </div>
           </div>
         </div>

@@ -2,8 +2,10 @@ import { useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sparkles, ChevronDown } from 'lucide-react';
 import { heroImage } from '@/lib/images';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function Hero() {
+  const { t } = useLanguage();
   const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -60,19 +62,18 @@ export default function Hero() {
       <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border border-rose-200/50 mb-8 animate-fade-in">
           <Sparkles className="w-4 h-4 text-rose-500" />
-          <span className="text-sm font-medium text-rose-700">Профессиональный перманентный макияж</span>
+          <span className="text-sm font-medium text-rose-700">{t('hero.badge')}</span>
         </div>
 
         <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light text-white mb-6 leading-tight drop-shadow-lg">
           <span className="block italic">Beauty Studio</span>
           <span className="block text-3xl sm:text-4xl md:text-5xl font-normal mt-4 text-white/90">
-            Искусство естественной красоты
+            {t('hero.subtitle')}
           </span>
         </h1>
 
         <p className="text-lg sm:text-xl text-white/80 max-w-2xl mx-auto mb-10 leading-relaxed drop-shadow-md">
-          Создаю идеальные брови, губы и веко, подчеркивая вашу естественную красоту. 
-          Доверьте свой образ профессионалу с 8-летним опытом.
+          {t('hero.description')}
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -81,7 +82,7 @@ export default function Hero() {
             onClick={() => scrollToSection('contact')}
             className="bg-white text-rose-600 hover:bg-rose-50 px-8 py-6 text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
           >
-            Записаться на консультацию
+            {t('hero.ctaBook')}
           </Button>
           <Button
             variant="outline"
@@ -89,7 +90,7 @@ export default function Hero() {
             onClick={() => scrollToSection('portfolio')}
             className="border-white text-white hover:bg-white/20 px-8 py-6 text-lg rounded-full transition-all duration-300"
           >
-            Посмотреть работы
+            {t('hero.ctaPortfolio')}
           </Button>
         </div>
 
@@ -97,15 +98,15 @@ export default function Hero() {
         <div className="mt-16 grid grid-cols-3 gap-8 max-w-lg mx-auto">
           <div className="text-center">
             <div className="text-3xl sm:text-4xl font-light text-white mb-1 drop-shadow-md">8+</div>
-            <div className="text-sm text-white/80">лет опыта</div>
+            <div className="text-sm text-white/80">{t('hero.years')}</div>
           </div>
           <div className="text-center">
             <div className="text-3xl sm:text-4xl font-light text-white mb-1 drop-shadow-md">2000+</div>
-            <div className="text-sm text-white/80">довольных клиентов</div>
+            <div className="text-sm text-white/80">{t('hero.clients')}</div>
           </div>
           <div className="text-center">
             <div className="text-3xl sm:text-4xl font-light text-white mb-1 drop-shadow-md">100%</div>
-            <div className="text-sm text-white/80">безопасность</div>
+            <div className="text-sm text-white/80">{t('hero.safety')}</div>
           </div>
         </div>
       </div>

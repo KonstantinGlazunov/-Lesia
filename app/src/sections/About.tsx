@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { Award, Heart, Shield, Star } from 'lucide-react';
 import { masterImage } from '@/lib/images';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function About() {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -25,26 +27,10 @@ export default function About() {
   }, []);
 
   const features = [
-    {
-      icon: Award,
-      title: 'Сертифицированный мастер',
-      description: 'Дипломы международных академий перманентного макияжа',
-    },
-    {
-      icon: Shield,
-      title: 'Безопасность',
-      description: 'Стерильные материалы и одноразовые расходники',
-    },
-    {
-      icon: Heart,
-      title: 'Индивидуальный подход',
-      description: 'Подбор формы и цвета под ваш тип внешности',
-    },
-    {
-      icon: Star,
-      title: 'Премиум материалы',
-      description: 'Только сертифицированные пигменты премиум-класса',
-    },
+    { icon: Award, titleKey: 'about.feature1Title', descKey: 'about.feature1Desc' },
+    { icon: Shield, titleKey: 'about.feature2Title', descKey: 'about.feature2Desc' },
+    { icon: Heart, titleKey: 'about.feature3Title', descKey: 'about.feature3Desc' },
+    { icon: Star, titleKey: 'about.feature4Title', descKey: 'about.feature4Desc' },
   ];
 
   return (
@@ -69,7 +55,7 @@ export default function About() {
               <div className="relative aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl">
                 <img
                   src={masterImage}
-                  alt="Леся Афанасьева - мастер перманентного макияжа"
+                  alt={t('about.imgAlt')}
                   className="w-full h-full object-cover"
                 />
                 
@@ -84,8 +70,8 @@ export default function About() {
                     <Award className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">Опыт работы</p>
-                    <p className="text-xl font-semibold text-gray-800">8+ лет</p>
+                    <p className="text-sm text-gray-500">{t('about.experience')}</p>
+                    <p className="text-xl font-semibold text-gray-800">{t('about.yearsCount')}</p>
                   </div>
                 </div>
               </div>
@@ -104,35 +90,24 @@ export default function About() {
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-rose-100/50 mb-6">
               <Star className="w-4 h-4 text-rose-500" />
-              <span className="text-sm font-medium text-rose-700">О мастере</span>
+              <span className="text-sm font-medium text-rose-700">{t('about.badge')}</span>
             </div>
 
             <h2 className="text-4xl sm:text-5xl font-light text-gray-800 mb-6 leading-tight">
-              Создаю красоту с <span className="italic text-gradient">любовью</span> и вниманием к деталям
+              {t('about.title')}
             </h2>
 
             <div className="space-y-4 text-gray-600 leading-relaxed mb-8">
-              <p>
-                Меня зовут Леся, и я — сертифицированный мастер перманентного макияжа с 8-летним опытом. Живу и работаю в Браунфельсе (Германия). 
-                Моя миссия — подчеркнуть естественную красоту каждой женщины, создавая гармоничный 
-                и естественный образ.
-              </p>
-              <p>
-                Я постоянно совершенствую свои навыки, посещая мастер-классы и курсы повышения квалификации 
-                у лучших специалистов мира. В работе использую только премиальные материалы и пигменты 
-                с сертификатами качества.
-              </p>
-              <p>
-                Для меня важно, чтобы каждая клиентка чувствовала себя особенной и уверенной в себе. 
-                Индивидуальный подход и тщательный подбор формы и цвета — залог идеального результата.
-              </p>
+              <p>{t('about.p1')}</p>
+              <p>{t('about.p2')}</p>
+              <p>{t('about.p3')}</p>
             </div>
 
             {/* Features grid */}
             <div className="grid sm:grid-cols-2 gap-4">
               {features.map((feature, index) => (
                 <div
-                  key={feature.title}
+                  key={feature.titleKey}
                   className={`group p-4 rounded-2xl bg-white/60 backdrop-blur-sm border border-rose-100 hover:border-rose-300 hover:shadow-lg transition-all duration-300 ${
                     isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
                   }`}
@@ -143,8 +118,8 @@ export default function About() {
                       <feature.icon className="w-5 h-5 text-rose-600" />
                     </div>
                     <div>
-                      <h3 className="font-medium text-gray-800 mb-1">{feature.title}</h3>
-                      <p className="text-sm text-gray-500">{feature.description}</p>
+                      <h3 className="font-medium text-gray-800 mb-1">{t(feature.titleKey)}</h3>
+                      <p className="text-sm text-gray-500">{t(feature.descKey)}</p>
                     </div>
                   </div>
                 </div>

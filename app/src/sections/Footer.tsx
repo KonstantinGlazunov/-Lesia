@@ -1,6 +1,9 @@
+import { Link } from 'react-router-dom';
 import { Heart, Instagram, Phone, Mail, MapPin } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function Footer() {
+  const { t, locale } = useLanguage();
   const currentYear = new Date().getFullYear();
 
   const scrollToSection = (id: string) => {
@@ -11,12 +14,12 @@ export default function Footer() {
   };
 
   const navLinks = [
-    { label: 'О мастере', id: 'about' },
-    { label: 'Услуги', id: 'services' },
-    { label: 'Портфолио', id: 'portfolio' },
-    { label: 'Цены', id: 'prices' },
-    { label: 'Отзывы', id: 'testimonials' },
-    { label: 'Контакты', id: 'contact' },
+    { labelKey: 'nav.about', id: 'about' },
+    { labelKey: 'nav.services', id: 'services' },
+    { labelKey: 'nav.portfolio', id: 'portfolio' },
+    { labelKey: 'nav.prices', id: 'prices' },
+    { labelKey: 'nav.testimonials', id: 'testimonials' },
+    { labelKey: 'nav.contact', id: 'contact' },
   ];
 
   return (
@@ -30,8 +33,9 @@ export default function Footer() {
           <div className="md:col-span-2">
             <h3 className="text-3xl font-light italic text-gradient mb-4">Beauty Studio</h3>
             <p className="text-gray-600 mb-6 max-w-md leading-relaxed">
-              Профессиональный перманентный макияж в Браунфельсе (Германия). 
-              Создаю естественную красоту, подчеркивающую вашу индивидуальность.
+              {locale === 'ru'
+                ? 'Профессиональный перманентный макияж в Браунфельсе (Германия). Создаю естественную красоту, подчеркивающую вашу индивидуальность.'
+                : 'Professionelles Permanent-Make-up in Braunfels (Deutschland). Natürliche Schönheit, die Ihre Persönlichkeit unterstreicht.'}
             </p>
             <div className="flex gap-4">
               <a
@@ -59,7 +63,7 @@ export default function Footer() {
 
           {/* Navigation */}
           <div>
-            <h4 className="font-medium text-gray-800 mb-4">Навигация</h4>
+            <h4 className="font-medium text-gray-800 mb-4">{t('footer.navigation')}</h4>
             <ul className="space-y-2">
               {navLinks.map((link) => (
                 <li key={link.id}>
@@ -67,7 +71,7 @@ export default function Footer() {
                     onClick={() => scrollToSection(link.id)}
                     className="text-gray-600 hover:text-rose-500 transition-colors duration-300"
                   >
-                    {link.label}
+                    {t(link.labelKey)}
                   </button>
                 </li>
               ))}
@@ -76,7 +80,7 @@ export default function Footer() {
 
           {/* Contact info */}
           <div>
-            <h4 className="font-medium text-gray-800 mb-4">Контакты</h4>
+            <h4 className="font-medium text-gray-800 mb-4">{t('footer.contacts')}</h4>
             <ul className="space-y-3">
               <li className="flex items-center gap-2 text-gray-600">
                 <Phone className="w-4 h-4 text-rose-400" />
@@ -94,6 +98,16 @@ export default function Footer() {
           </div>
         </div>
 
+        {/* Cookie-Hinweis (Transparenz gemäß DSGVO/TTDSG) */}
+        <div className="py-3 px-4 bg-rose-50/80 border-b border-rose-200">
+          <p className="text-center text-xs text-gray-600">
+            {t('footer.cookieNote')}{' '}
+            <Link to="/datenschutz" className="text-rose-600 hover:underline">
+              {t('footer.cookieLink')}
+            </Link>
+          </p>
+        </div>
+
         {/* Bottom bar */}
         <div className="pt-8 border-t border-rose-200">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -101,20 +115,20 @@ export default function Footer() {
               © {currentYear} Beauty Studio · Lesya Afanaseva
             </p>
             <div className="flex items-center gap-6">
-              <button
-                onClick={() => scrollToSection('impressum')}
+              <Link
+                to="/impressum"
                 className="text-sm text-gray-500 hover:text-rose-500 transition-colors"
               >
-                Impressum
-              </button>
-              <button
-                onClick={() => scrollToSection('datenschutz')}
+                {t('footer.impressum')}
+              </Link>
+              <Link
+                to="/datenschutz"
                 className="text-sm text-gray-500 hover:text-rose-500 transition-colors"
               >
-                Datenschutz
-              </button>
+                {t('footer.datenschutz')}
+              </Link>
               <p className="text-sm text-gray-500 flex items-center gap-1">
-                Сделано с <Heart className="w-4 h-4 text-rose-400 fill-rose-400" /> для вас
+                {t('footer.madeWith')} <Heart className="w-4 h-4 text-rose-400 fill-rose-400" /> {t('footer.forYou')}
               </p>
             </div>
           </div>

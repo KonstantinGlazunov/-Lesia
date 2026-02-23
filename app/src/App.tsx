@@ -1,3 +1,4 @@
+import { Routes, Route } from 'react-router-dom';
 import Navigation from './sections/Navigation';
 import Hero from './sections/Hero';
 import About from './sections/About';
@@ -9,23 +10,35 @@ import Contact from './sections/Contact';
 import Impressum from './sections/Impressum';
 import Datenschutz from './sections/Datenschutz';
 import Footer from './sections/Footer';
+import ScrollToTop from './components/ScrollToTop';
+
+function HomePage() {
+  return (
+    <>
+      <Hero />
+      <About />
+      <Services />
+      <Portfolio />
+      <Prices />
+      <Testimonials />
+      <Contact />
+    </>
+  );
+}
 
 function App() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-rose-50/30 via-white to-amber-50/20">
       <Navigation />
       <main>
-        <Hero />
-        <About />
-        <Services />
-        <Portfolio />
-        <Prices />
-        <Testimonials />
-        <Contact />
-        <Impressum />
-        <Datenschutz />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/impressum" element={<Impressum />} />
+          <Route path="/datenschutz" element={<Datenschutz />} />
+        </Routes>
       </main>
       <Footer />
+      <ScrollToTop />
     </div>
   );
 }

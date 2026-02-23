@@ -27,7 +27,8 @@ const IMAGE_FILES = [
 ];
 
 function imagePath(filename: string) {
-  return `/Image/${encodeURIComponent(filename)}`;
+  const base = import.meta.env.BASE_URL;
+  return `${base}Image/${encodeURIComponent(filename)}`;
 }
 
 /** Фон главного экрана */
